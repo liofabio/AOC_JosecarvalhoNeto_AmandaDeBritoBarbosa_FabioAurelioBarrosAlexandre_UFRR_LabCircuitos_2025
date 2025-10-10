@@ -1,0 +1,1 @@
+# AOC_Josecarvalho_Nome1Nome2_UFRR_LabCircuitos_2025
