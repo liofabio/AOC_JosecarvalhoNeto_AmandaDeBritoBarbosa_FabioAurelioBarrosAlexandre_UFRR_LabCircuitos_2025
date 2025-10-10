@@ -34,3 +34,6 @@ A saída é `1` **somente quando as entradas são diferentes**:
 
 2. **Máscara do AND:**  
    `Y = (A ∨ B) ∧ ¬(A ∧ B)`
+
+   <img width="587" height="285" alt="image" src="https://github.com/user-attachments/assets/b511a63c-2d23-4631-a8ab-b6b9f50c2d06" />
+
