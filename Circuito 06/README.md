@@ -1,83 +1,120 @@
 # Memória RAM (8 bits)
 
-Uma **RAM de 8 bits** feita com **Flip-Flops D**, **Demultiplexador** (para escrita) e **Multiplexador** (para leitura).  
-Interface: dados de **8 bits**, endereço de **3 bits** (8 células), controle por **clock**, **ler**, **escrever** e **reset**.
+Este circuito implementa uma **Memória RAM (Random Access Memory)** funcional utilizando **Flip-Flops D**, **demultiplexador** e **multiplexador** para leitura e escrita.  
+Possui interface de **8 bits** para dados e sinais de **clock**, **ler**, **escrever** e **chave de endereçamento**.
 
----
-
-## Visão Geral
-- **Célula de memória (8 bits)**: 8 Flip-Flops D em paralelo formam 1 registrador de 8 bits.
-- **Banco de 8 células**: endereçadas por uma chave de 3 bits (`A2 A1 A0`).
-- **Demux 1→8 (escrita)**: direciona o pulso de escrita apenas para a célula selecionada.
-- **Mux 8→1 (8 bits)**: seleciona qual célula vai para a saída durante a leitura.
-- **Registrador de saída (cache, opcional)**: armazena o dado lido quando `ler=1` antes de expor na saída.
+**Memória RAM**  
+<img width="625" height="509" alt="image" src="https://github.com/user-attachments/assets/060d0558-da1b-40cf-8079-5e959c3ee198" />
 
 
 ---
 
-## Pinos / Interfaces
-**Entradas**
-- `D[7:0]` — Dados de entrada (para escrita).
-- `A[2:0]` — Endereço (seleciona 1 entre 8 células).
-- `CLK` — Clock (sincroniza escrita e, opcionalmente, o registrador de saída).
-- `WE` — *Write Enable* (1 = escreve).
-- `RE` — *Read Enable* (1 = lê).
-- `RST` — Reset (zera Flip-Flops D).
+## Componentes Principais
+
+### Registrador (Célula de Memória)
+- As células são feitas com **Flip-Flops D**, que armazenam cada bit.
+- Cada célula contém **8 FF-D** em paralelo (um **registro de 8 bits**).
+
+  <img width="460" height="433" alt="image" src="https://github.com/user-attachments/assets/2c192ed2-c128-4e4b-b021-37f67e027a44" />
 
 
----
+### Demultiplexador 1×8 (1 bit)
+- **Direciona o sinal de escrita** para **uma** das 8 células.
+- A célula ativa é escolhida pela **chave de endereçamento**.
+- Permite escrever na célula selecionada **apenas** se o sinal **escrever** estiver ativo.
+- **Obs.:** neste documento, a saída aparece como **8 bits** para simplificar.  
+  No circuito principal, a saída do demultiplexador é **dividida via Distribuidor** (nativo do Logisim).
 
-## Funcionamento
+  <img width="443" height="564" alt="image" src="https://github.com/user-attachments/assets/875e3b7c-64e7-46a3-a0cb-e5fc061f1a9d" />
 
-### Escrita
-1. **Endereço**: `A` seleciona a célula-alvo.  
-2. **Demux**: habilita **somente** o `WE` da célula endereçada.  
-3. **Captura**: na **borda ativa** de `CLK`, a célula salva `D[7:0]` (se `WE=1`).  
 
-**Fluxo**: `D[7:0]` → Demux (via `A`, `WE`) → Flip-Flops D da célula → armazenado em `CLK`.
+### Multiplexador 8×1 (8 bits)
+- **Seleciona** uma das 8 células para **leitura**.
+- A célula lida é definida pela **chave de endereçamento**.
+- Só transfere dados à saída se o sinal **ler** estiver **ativado**.
 
-### Leitura
-1. **Endereço**: `A` escolhe a célula-fonte.  
-2. **Mux**: roteia a palavra de 8 bits da célula selecionada.  
-3. **Registrador (opcional)**: se `RE=1`, atualiza o cache na borda de `CLK` e expõe em `Q`.
+  <img width="486" height="348" alt="image" src="https://github.com/user-attachments/assets/5da0df89-3f20-453d-bb29-b754bb39348d" />
 
-**Fluxo**: Célula endereçada → Mux 8→1 → (Registrador se houver `RE`) → `Q[7:0]`.
 
----
+**Modo de construção:**  
+1. Fazer um **Multiplexador 2×1 de 1 bit**.  
+2. A partir dele, construir um **Multiplexador 2×1 de 8 bits** (8 cópias em paralelo).  
+3. Em seguida, montar uma **árvore “mata-mata”** com muxes 2×1 (8 bits) controlados por cada bit da chave → **Multiplexador 8×1 (8 bits)**.
 
-## Tabela de Operações
-| `WE` | `RE` | Ação                               | Efeito nos dados                |
-|:----:|:----:|------------------------------------|---------------------------------|
-|  1   |  0   | **Escrita** na célula `A`          | `mem[A] ← D` (na borda de `CLK`)|
-|  0   |  1   | **Leitura** da célula `A`          | `Q ← mem[A]` (direto ou via reg)|
-|  1   |  1   | Evitar                              | Pode causar conflito de intenção|
-|  0   |  0   | Ocioso                              | Sem mudança; saída mantém estado|
+   <img width="498" height="429" alt="image" src="https://github.com/user-attachments/assets/ed569988-0d66-4b5b-a947-45ea0618a9e1" />
 
-> Se usar registrador de saída **sincronizado**, `Q` muda apenas em borda de `CLK` com `RE=1`.  
-> Com saída **combinacional** (sem registrador), `Q` segue o Mux imediatamente.
 
----
+### Registrador (Cache)
+- Um registrador adicional **armazena temporariamente** os dados lidos.
+- **Atualiza** apenas quando o sinal **ler** estiver **ativado**.
 
-## Construção dos Blocos
-
-### 1) Célula (Registrador 8 bits)
-- 8× Flip-Flop D (com `CLK` e `RST` compartilhados).
-- Entrada paralela `D[7:0]` — habilitada pela linha de escrita local (do Demux).
-
-### 2) Demultiplexador 1→8 (habilitação de escrita)
-- Entradas: `WE`, `A[2:0]`.
-- Saídas: `WE_0 … WE_7` (somente a correspondente ao endereço vai a 1).
-- **No Logisim**: pode usar **Decoder** (`3→8`) + `AND(WE, sel[i])` ou um **Demux** nativo.  
-- **Distribuidor**: para replicar `WE` e levar às células.
-
-### 3) Multiplexador 8→1 (largura 8 bits)
-- **Abordagem hierárquica**:
-  1. **Mux 2→1 (1 bit)** — bloco base.
-  2. **Mux 2→1 (8 bits)** — 8 cópias do bloco de 1 bit em paralelo.
-  3. **Árvore “mata-mata”**: combine 2→1 (8 bits) em estágios até formar um **8→1 (8 bits)**.
-- Seleção por `A[2:0]`.
-
+### Sinais de Controle
+- **Clock:** sincroniza todas as operações.
+- **Reset:** zera os valores armazenados nas células.
+- **Escrever:** ativa a escrita na célula selecionada.
+- **Ler:** ativa a leitura da célula selecionada.
 
 ---
 
+## Funcionamento Geral
+
+### Escrita de Dados
+1. **Entrada de dados:** aplicar os **8 bits** na entrada.
+2. **Sinal de controle:** **escrever = 1** para permitir gravação.
+3. **Endereçamento:** a chave seleciona **qual célula** receberá os dados.
+4. **Demux:** direciona o **sinal de escrita** apenas à célula endereçada.
+5. **Armazenamento:** na **próxima borda de clock**, a célula salva o byte de entrada.
+
+### Leitura de Dados
+1. **Endereçamento:** a chave escolhe **qual célula** será lida.
+2. **Sinal de controle:** **ler = 1** para habilitar a leitura.
+3. **Multiplexador:** seleciona os **8 bits** da célula endereçada.
+4. **Transferência ao registrador:** os dados vão para o **cache** (registrador).
+5. **Saída:** o valor do registrador é enviado à **saída de 8 bits**.
+
+---
+
+## Detalhes do Circuito
+
+### Interface de Entrada
+- **Dados (8 bits)** a serem escritos.
+- **Endereço (3 bits)** da chave de endereçamento.
+
+### Interface de Controle
+- **Clock:** sincroniza o circuito.
+- **Escrever:** habilita a escrita na célula endereçada.
+- **Ler:** habilita a leitura da célula endereçada.
+- **Reset:** zera os registros de memória.
+
+### Interface de Saída
+- **Saída (8 bits):** dados lidos da memória (via registrador).
+
+---
+
+## Resumo do Fluxo de Operações
+
+**Escrita:**  
+`Dados de entrada → Demux (endereço) → Célula selecionada → (borda do clock) → Armazenado`
+
+**Leitura:**  
+`Célula selecionada → Mux 8×1 → Registrador (cache) → Saída`
+
+---
+
+## Vantagens do Circuito
+- **Armazenamento dinâmico:** leitura e escrita em tempo real.
+- **Endereçamento simples:** seleção por chave de 3 bits.
+- **Controle rigoroso:** sinais separados de **ler** e **escrever** evitam conflitos.
+
+---
+
+## Aplicações
+- **Memória volátil:** para sistemas com leituras/escritas frequentes.
+- **Sistemas embarcados:** pequenas RAMs em dispositivos de baixo custo.
+- **Simulação didática:** entender a dinâmica de leitura/escrita em memórias digitais.
+
+---
+
+## Considerações Finais
+Este circuito demonstra a implementação de uma **RAM simples** com **FF-D**, **multiplexadores** e **demultiplexadores**, oferecendo um modelo prático para compreender operações fundamentais de **leitura** e **escrita** em sistemas digitais.
 
