@@ -12,7 +12,6 @@ Interface: dados de **8 bits**, endereço de **3 bits** (8 células), controle p
 - **Mux 8→1 (8 bits)**: seleciona qual célula vai para a saída durante a leitura.
 - **Registrador de saída (cache, opcional)**: armazena o dado lido quando `ler=1` antes de expor na saída.
 
-> No Logisim(-Evolution), a “saída” do demultiplexador pode ser distribuída com o **Distribuidor** nativo.
 
 ---
 
@@ -25,8 +24,6 @@ Interface: dados de **8 bits**, endereço de **3 bits** (8 células), controle p
 - `RE` — *Read Enable* (1 = lê).
 - `RST` — Reset (zera Flip-Flops D).
 
-**Saída**
-- `Q[7:0]` — Dados lidos (alta impedância/estáveis conforme sua topologia).
 
 ---
 
