@@ -3,8 +3,7 @@
 Este circuito detecta o padrão binário **101** em um fluxo de bits de entrada.  
 Utiliza portas lógicas básicas para verificar e sinalizar quando essa sequência ocorre.
 
-**Detector 101**  
-**Link do circuito:** _adicione aqui o URL/arquivo_
+<img width="472" height="277" alt="image" src="https://github.com/user-attachments/assets/90756188-395c-4e47-9b49-9d3a403698e2" />
 
 ---
 
@@ -67,5 +66,5 @@ Se as condições forem atendidas, a saída da **AND** resulta em **1**, que é 
 - **Controladores de Estado Finito:** monitoramento de eventos em sistemas digitais.  
 - **Filtros de Sinal:** extração de informações relevantes de sequências binárias.
 
-<img width="472" height="277" alt="image" src="https://github.com/user-attachments/assets/90756188-395c-4e47-9b49-9d3a403698e2" />
+
 
