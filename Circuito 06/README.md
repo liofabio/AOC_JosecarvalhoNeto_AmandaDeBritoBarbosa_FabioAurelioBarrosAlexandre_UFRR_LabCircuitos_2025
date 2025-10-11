@@ -80,27 +80,7 @@ Interface: dados de **8 bits**, endereço de **3 bits** (8 células), controle p
   3. **Árvore “mata-mata”**: combine 2→1 (8 bits) em estágios até formar um **8→1 (8 bits)**.
 - Seleção por `A[2:0]`.
 
-### 4) Registrador de Saída (Cache) — opcional
-- Flip-Flops D (8 bits).  
-- Atualiza somente com `RE=1` na borda de `CLK`.
 
 ---
 
-## Reset
-- `RST=1` zera **todas** as células (e o registrador de saída, se existir).
-
----
-
-## Exemplo de Teste
-1. **Escrita**: `A=3`, `D=0x5A`, `WE=1`, `RE=0`, borda de `CLK` → `mem[3]=0x5A`.
-2. **Leitura**: `A=3`, `WE=0`, `RE=1` → `Q=0x5A` (combinacional) **ou** na próxima borda de `CLK` (se usar registrador de saída).
-
----
-
-## Links (substitua pelos seus)
-- **Diagrama geral**: `assets/ram8_diagrama.png`  
-- **Circuito (Logisim)**: `circuit/ram8.circ`
-
-```md
-![RAM 8 bits](assets/ram8_diagrama.png)
 
