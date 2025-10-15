@@ -107,10 +107,11 @@ As entradas `J` e `K` determinam o próximo estado de `Q` na borda de descida do
     - **Entradas Assíncronas:** `PRESET`, `CLEAR`
     - **Saídas:** `Q`, `~Q`
 
-* **Função Lógica:**
-  A equação característica do Flip-Flop JK é:
-  $$ Q_{próximo} = (J \land \neg Q) \lor (\neg K \land Q) $$
-  O circuito consiste em dois latches: o **Mestre**, que captura o estado das entradas `J` e `K` quando `CLOCK=1`, e o **Escravo**, que transfere o estado do Mestre para a saída `Q` quando `CLOCK` transiciona para `0`.
+* **Função Lógica:**  
+  A equação característica do Flip-Flop JK é:  **Q(próximo) = (J ∧ ¬Q) ∨ (¬K ∧ Q)**  
+
+  O circuito consiste em dois latches: o **Mestre**, que captura o estado das entradas `J` e `K` quando `CLOCK = 1`, e o **Escravo**, que transfere o estado do Mestre para a saída `Q` quando `CLOCK` transiciona para `0`.
+
 
 #### Análise e Teste de Unidade
 1.  **Teste Assíncrono:**
