@@ -2,9 +2,15 @@
 
 ## Definição
 
-Um extensor de sinal é um circuito criado para converter um número com sinal n bits para um número com sinal de n bits, sem que seu valor e sinal sejam alterados no processo.
+Um extensor de sinal é um circuito criado para converter um número com sinal *n* bits para um número com sinal de *n* bits, sem que seu **valor e sinal** sejam alterados no processo. Para isso, o circuito utiliza o conceito de complemento de 2, uma forma de representar números negativos em binário.
 
-No esquema proposto, foi usado um barramento de entrada de 4 bits direcionado para um barramento de saída de 8 bits.
+No esquema proposto, foi usado um barramento de **entrada de 4 bits** direcionado para um barramento de **saída de 8 bits**.
+
+Está organizado da seguinte maneira: A entrada com barramento de 4 bits, onde o fio 3 representa o bit mais significativo, é o bit que determina o sinal do número. A saída com barramento de 8 bits, onde os fios 4, 5, 6 e 7 estão ligados ao bit mais significativo da entrada (3), usados para replicar o valor/sinal, e assim estender o número sem que haja perda de significado. 
+
+<img width="332" height="281" alt="Image" src="https://github.com/user-attachments/assets/1ec4afdc-b371-4219-be67-3152d0da4f40" />
+
+---
 
 ## Tabela Verdade
 
@@ -29,15 +35,11 @@ Podemos ver as possibilidades de combinação para expansão (2^4 = 16) na segui
 |       -2       |     1110     |   1111 1110  |
 |       -1       |     1111     |   1111 1111  |
 
-## Circuito Lógico
-
-![Diagrama do Multiplexador de 4 entradas](image_2d491c.png)
-
+---
 
 ## Exemplo de Funcionamento
 
-Para exemplificar, o teste será para a saída D0. Para isso, S1 é 0, passando pelo inversor, se torna 1. S2 é 0, passando pelo inversor se torna 1. A primeira porta AND recebe 1 do D0, portanto passa a receber os valores 1 1 1.
+O número -5 é representado usando o complemento de dois por 1101. Na conversão, os mesmos bits se mantém, porém os 4 bits adicionais serão a repetição do bit mais esquerda (o MSB), que resultará em 1111 1011.
 
-Considerando a lógica da tabela verdade, uma porta AND tem saída como verdadeira quando todos os seus valores são verdadeiros, e falsa quando pelo menos um dos valores é falso. Nesse caso, a saída será verdadeira, pois todos os valores recebidos são verdadeiros, enquanto nas outras portas pelo menos 1 entrada foi 0 (falsa).
+<img width="309" height="268" alt="Image" src="https://github.com/user-attachments/assets/e15fd5ab-4fe2-408b-ab6b-57807ef4242a" />
 
-A porta OR no fim do circuito, reúne as saídas das portas AND e tem saída verdadeira quando pelo menos 1 entrada for verdadeira. O mesmo acontece nas entradas D1, D2 e D3, com as respectivas combinações da chave.
