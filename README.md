@@ -21,7 +21,7 @@ Os circuitos apresentados são:
 9. Detector de sequência binária para identificar a sequência 101 em um fluxo de entrada;
 10. ULA de 8 bits com as operações: AND, OR, NOT, NOR, NAND, XOR, SHIFT de 2 bits à esquerda, SHIFT de bits à direita, soma e subtração;
 11. Extensor de sinal de 4 bits para 8 bits;
-12. Implemente uma máquina de estados utilizando portas lógicas;
+12. Máquina de estados utilizando portas lógicas;
 13. Contador Síncrono;
 14. Detector de Paridade Ímpar;
 15. Otimização Lógica com Mapa de Karnaugh;
